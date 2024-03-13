@@ -19,7 +19,7 @@ describe.each(['builtin', 'express'])('Remix API Loaders with adapter = %s', ada
     assertSentryTransaction(transaction, {
       contexts: {
         trace: {
-          status: 'internal_error',
+          status: 'unknown_error',
           data: {
             'http.response.status_code': 500,
           },
@@ -133,7 +133,7 @@ describe.each(['builtin', 'express'])('Remix API Loaders with adapter = %s', ada
       contexts: {
         trace: {
           op: 'http.server',
-          status: 'internal_error',
+          status: 'unknown_error',
           data: {
             method: 'GET',
             'http.response.status_code': 500,
@@ -184,9 +184,7 @@ describe.each(['builtin', 'express'])('Remix API Loaders with adapter = %s', ada
       const val = key[key.length - 1];
       expect(tags[key]).toEqual(val);
     });
-    // express tests tend to take slightly longer on node >= 20
-    // TODO: check why this is happening
-  }, 10000);
+  });
 
   it('continues transaction from sentry-trace header and baggage', async () => {
     const env = await RemixTestEnv.init(adapter);
